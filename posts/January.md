@@ -31,11 +31,11 @@ date: '2022-02-28'
 - 本格的にブロックチェーン扱う会社で仕事してるんだなあと実感
 
 # 勉強
-- SolidityでDAppsを作るオライリーの公式githubに難癖をつけた ⇒（[PR](https://github.com/RedSquirrelTech/hoscdev/issues/70))）
-  - ZennのScrapに進捗スレッド書く作業も悪くないと思った ⇒ [Scrap](https://zenn.dev/mizuneko4345/scraps/b3d34f0505a63a)
-    - 同じエラーに当たった人が二人もいた
+- SolidityでDAppsを作るOReillyの公式githubに難癖つけた ⇒ [PR](https://github.com/RedSquirrelTech/hoscdev/issues/70)
+- ZennのScrapsに進捗スレッド書く作業も悪くないと思った ⇒ [Scraps](https://zenn.dev/mizuneko4345/scraps/b3d34f0505a63a)
+  - [PR](https://github.com/RedSquirrelTech/hoscdev/issues/70)と同じエラーに当たった人が二人もいた
+  - 社内勉強会で得た知識をまとめた
 - Node.jsとMySQLで簡単な検索サイト作った(private repogitory)
-- AWSの勉強そろそろ再開しようとか決意してた
-
+  - AWSデプロイしようとしてやめた
 # 感想
 1月は本当にバタバタしてたなあ。実家の暮らし方が合わなかったのと転職と引っ越し2回重なったのがつらかった。ほとんど勉強できてなかったと思う。
