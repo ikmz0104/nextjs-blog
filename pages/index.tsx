@@ -1,54 +1,69 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
+import { getPostsData } from '../lib/posts'
 import { getSortedPostsData } from '../lib/posts'
+import { getUserData } from '../lib/user'
+import { GetStaticProps } from 'next'
+import Link from 'next/link'
+import { Article } from '../types/Article'
+import { UserResponse } from '../types/Response'
+import Layout from '../components/layout'
 import Date from '../components/date'
-import { GetStaticProps } from "next";
+import Topics from '../components/topics'
+import { siteTitle } from '../components/layout'
 
 //ビルド時の依存関係
+//サーバ側の処理
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedPostsData()
+  const allPostsData = await getPostData() //repo内の記事を全取得
+  const sortedPostData = await getSortedPostsData(allPostsData) //記事をソートする
+  const userData = await getUserData() //githubのユーザ画像を取得
   return {
     props: {
-      allPostsData
+      sortedPostData: sortedPostData,
+      userData: userData, 
     }
   }
 };
 
-export default function Home({
-  allPostsData,
+const pattern = ["bg-blue", "bg-blue-light", "bg-gray", "bg-earth-light"]; 
+function getColorClassFromIndex(index: number): string {
+  return pattern[index % pattern.length];
+}
+export default function Home({ 
+  sortedPostData, userData
 }: {
-  allPostsData: {
-    date: string;
-    title: string;
-    id: string;
-  }[];
+  sortedPostData: Article[]
+  userData: UserResponse
 }) {
   return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <section className={utilStyles.headingMd}>
-        <p>Hello World!</p>
-      </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
-                <a>{title}</a>
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={date} />
-              </small>
+    <Layout avatarUrl={userData.avatar_url}>
+      <div className="lg:max-w-5xl lg:mx-auto">
+        <Head>
+          <title>{siteTitle}</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <ul className="mx-auto lg:flex lg:flex-wrap lg:justify-between lg:max-w-2xl xl:max-w-4xl">
+					{/*Githubのリポジトリから取得したデータを整形したものをmap関数で並べる*/}
+          {sortedPostData.map(({ id, title, date, topics, type }, index) => (
+            <li className={getColorClassFromIndex(index) + " h-60 flex justify-center items-center lg:max-w-xs xl:max-w-sm w-full lg:mb-14 lg:bg-transparent" } key={id}>
+              <div className="w-11/12 h-5/6 flex flex-col">
+                <div className="font-bold text-xl">
+                  <Link href={`/posts/${id}`}>
+                    {title}
+                  </Link>
+                </div>
+                <div className="text-xs text-gray-darker">
+                  <Topics topicList={topics} />
+                </div>
+                <small className="border border-r-0 border-b-0 border-l-0 h-8 flex justify-between mt-auto items-end">
+                  <span>{type}</span>
+                  <Date dateString={date} />
+                </small>
+              </div>
             </li>
           ))}
         </ul>
-      </section>
+      </div>
     </Layout>
   )
 }
